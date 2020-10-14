@@ -74,4 +74,41 @@ npm install -D webpack-cli
 
 可快速的通过`npm run build`进行打包，效果跟之前的`npx webpack`一致。
 
+*** 以上代码在`webpack-demo1`中
+
+
+### 管理资源
+
+由于webpack只能打包js文件，但是其他文件，如图片/css等，如何打包呢？
+
+基本的思路都是将相应的资源都转化成js文件
+
+#### css
+
+正常的css文件例子如下
+
+安装 `style-loader`和`css-loader`
+
+```
+npm i --save-dev style-loader css-loader
+```
+
+在`webpack.config.js`中配置相应的`css`,顺序很重要，'style-loader','css-loader'
+
+最终打包出来的是一个js文件
+
+```
+module:{
+    rules:[{
+        test:/\.css$/,
+        use:['style-loader','css-loader']
+    },{
+        test:/\.scss$/,
+        use:['style-loader','css-loader']
+    }]
+}
+```
+最终再页面上展示的是在head中添加了style，由此我猜测，style-loader的作用是将css文件放置到head中去渲染，css-loader的作用是将css文件(包含其他形式的css，如.scss)转化成js文件
+
+其他的比如less/sass等，都跟css写法保持一致，最需将匹配的test，改成相对应的文件后缀。
 
