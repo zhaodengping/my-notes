@@ -1,6 +1,7 @@
 ## webpack5
 
-### 概念
+### 起步
+#### 概念
 
 `webpack`是用于编译`JavaScript`模块。
 
@@ -10,7 +11,7 @@
 
 当浏览器发起请求时，大大节约了时间。
 
-### 更新方向
+#### 更新方向
 
 1. 尝试用持久性缓存来提高构建性能。
 2. 尝试用更好的算法和默认值来改进长期缓存。
@@ -19,7 +20,7 @@
 5. 尝试在不引入任何破坏性变化的情况下，清理那些在实现 v4 功能时处于奇怪状态的内部结构。
 6. 试图通过现在引入突破性的变化来为未来的功能做准备，使其能够尽可能长时间地保持在 v5 版本上。
 
-### 安装
+#### 安装
 
 创建文件夹并初始化，文件夹中会出现`package.js`文件，是基础的一些配置，包括文件名称/版本/描述/入口文件/关键字/作者等。
 
@@ -46,7 +47,31 @@ npm install -D webpack-cli
 },
 ```
 
-### 打包
+#### 打包
 
 使用`npx webpack`进行打包，会在`/dist`文件夹中，生成`mian.js`文件，这个是对`index.js`文件以及相应依赖进行的打包文件
+
+#### 配置文件 webpack.config.js
+
+在完成配置的webpack.config.js的文件夹后，再次打包，打包命令是npx webpack --config webpack.config.js
+
+一般情况下，如果存在webpack.config.js文件，将默认选择根据这个配置文件进行打包，即npx webpack即可
+
+其中--config表示根据什么文件配置进行打包，后面的参数就是对应的文件名称
+
+配置文件里面都是一些配置，如`loader/plugin/resolve`等
+
+#### 快捷方式
+
+在`package.json`文件中，配置`script`
+
+```
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"webpack"
+},
+```
+
+可快速的通过`npm run build`进行打包，效果跟之前的`npx webpack`一致。
+
 
