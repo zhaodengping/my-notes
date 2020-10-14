@@ -102,13 +102,33 @@ module:{
     rules:[{
         test:/\.css$/,
         use:['style-loader','css-loader']
-    },{
-        test:/\.scss$/,
-        use:['style-loader','css-loader']
     }]
 }
 ```
 最终再页面上展示的是在head中添加了style，由此我猜测，style-loader的作用是将css文件放置到head中去渲染，css-loader的作用是将css文件(包含其他形式的css，如.scss)转化成js文件
 
 其他的比如less/sass等，都跟css写法保持一致，最需将匹配的test，改成相对应的文件后缀。
+
+### image图片
+
+安装解析文件的loader，`npm i --save-dev file-loader`
+
+并在module中进行配置
+
+```
+module:{
+    rules:[{
+        test:/\.(css|scss)$/,
+        use:['style-loader','css-loader']
+    },{
+        test:/\.(png|jpeg|jpg|svg)$/,
+        use:['file-loader']
+    }]
+}
+```
+
+最终在页面上检查元素时，发现webpack以及将路径转义了。
+
+
+其他形式的文件，都是以上面相应的方法进行安装和配置即可。
 
