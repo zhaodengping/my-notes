@@ -109,7 +109,7 @@ module:{
 
 其他的比如less/sass等，都跟css写法保持一致，最需将匹配的test，改成相对应的文件后缀。
 
-### image图片
+#### image图片
 
 安装解析文件的loader，`npm i --save-dev file-loader`
 
@@ -132,3 +132,50 @@ module:{
 
 其他形式的文件，都是以上面相应的方法进行安装和配置即可。
 
+*** 以上代码在`webpack-demo2`中
+
+### 管理输出
+
+当文件程序变得复杂，而且在`entry`中使用多个入口，并输出多个`bundle`，如果要手动在`index.html`中添加，便使得整个代码看起来不便捷
+
+这时使用插件`html-webpack-plugin`
+
+#### html-webpack-plugin
+
+这个插件可以自动更新`index.html`中有关js引入的文件
+
+安装`npm i --save-dev html-webpack-plugin`
+
+使用：
+```
+const HtmlWebpackPlugin=require('html-webpack-plugin')
+plugins:[
+    new HtmlWebpackPlugin({
+        title:'管理输出'
+    })
+]
+```
+
+缺点是不能去除之前的旧文件，这时引入`clean-webpack-plugin`
+
+#### clean-webpack-plugin
+
+这个插件可去除`/dist`文件
+
+在构建前去除`/dist`文件，可以达到效果
+
+
+安装`npm i --save-dev clean-webpack-plugin`
+
+使用：
+```
+const {CleanWebpackPlugin}=require('clean-webpack-plugin')
+plugins:[
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+        title:'管理输出'
+    })
+]
+```
+
+*** 以上代码在`webpack-demo3`中
