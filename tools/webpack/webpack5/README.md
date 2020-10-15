@@ -179,3 +179,118 @@ plugins:[
 ```
 
 *** 以上代码在`webpack-demo3`中
+
+### 开发环境
+
+这部分是在开发环境，切不可在生产环境使用。
+
+#### 配置环境
+
+在`webpack.config.js`中进行mode的配置
+
+```
+mode:'development'
+```
+
+#### 定位错误(source map)
+
+打包文件时，由于打包到一个文件里，如果出现语法错误，只会定位到打包后的文件，对于我们查找问题就不太方便。
+
+source map有很多的配置，对于我们现在打包定位错误，只需其中的`devtool`配置即可。
+
+```
+devtool: 'inline-source-map',
+```
+
+如webpack-demo4中的例子所示，`print.js`中，刻意写错代码如：`cnlll.log('This is output')`
+
+正常打包，在浏览器运行时，会在console里显示报错的文件，以及错误的原因。
+
+
+#### 自动编译
+
+`webpack-dev-server`插件提供一个简单的web server，且具有热加载的功能。
+
+安装`npm i --save-dev webpack-dev-server`
+
+在配置文件中配置:
+
+```
+devServer:{
+    contentBase:'./dist'
+},
+```
+以上代码是告诉dev server，将dist文件下的文件，挂载到localhost:8080下。
+
+在`package.json`中进行配置口令运行 dev server
+
+教程上建议如下配置
+
+```
+"start": "webpack-dev-serve --open"
+```
+
+在实践操作中，在执行`npm run start`时，我出现以下报错
+
+```
+> webpack-demo4@1.0.0 start /Users/alicezhao/Desktop/learn/demos/my-notes/tools/webpack/webpack5/webpack-demo4
+> webpack-dev-server --open
+
+internal/modules/cjs/loader.js:969
+  throw err;
+  ^
+
+Error: Cannot find module 'webpack-cli/bin/config-yargs'
+Require stack:
+- /Users/alicezhao/Desktop/learn/demos/my-notes/tools/webpack/webpack5/webpack-demo4/node_modules/webpack-dev-server/bin/webpack-dev-server.js
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:966:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:842:27)
+    at Module.require (internal/modules/cjs/loader.js:1026:19)
+    at require (internal/modules/cjs/helpers.js:72:18)
+    at Object.<anonymous> (/Users/alicezhao/Desktop/learn/demos/my-notes/tools/webpack/webpack5/webpack-demo4/node_modules/webpack-dev-server/bin/webpack-dev-server.js:65:1)
+    at Module._compile (internal/modules/cjs/loader.js:1138:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1158:10)
+    at Module.load (internal/modules/cjs/loader.js:986:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:879:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/alicezhao/Desktop/learn/demos/my-notes/tools/webpack/webpack5/webpack-demo4/node_modules/webpack-dev-server/bin/webpack-dev-server.js'
+  ]
+}
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! webpack-demo4@1.0.0 start: `webpack-dev-server --open`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the webpack-demo4@1.0.0 start script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/alicezhao/.npm/_logs/2020-10-15T07_50_22_972Z-debug.log
+```
+
+我的有关`webpack`版本配置如下
+
+```
+"devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^5.1.0",
+    "webpack-cli": "^4.0.0",
+    "webpack-dev-server": "^3.11.0"
+},
+```
+
+我在github上找到相关的问题，看[这里](https://github.com/webpack/webpack-dev-server/issues/2759)
+
+是`webpack-dev-server`版本不支持`webpack5.0`和`webpack-cli4.0`
+
+最终在`package.json`应做如下配置
+
+```
+"start": "webpack serve --mode development --env development"
+```
+
+再执行`npm run start`就正常启动。
+
