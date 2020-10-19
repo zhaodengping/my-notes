@@ -452,4 +452,4 @@ module.exports={
 然而官网上展示的例子是不一样，引出了需要引入`optimization.moduleIds:'hashed'`---苦笑不得
 
 
-
+*** 以上代码在`webpack-demo6`中
