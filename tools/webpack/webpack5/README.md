@@ -453,3 +453,17 @@ module.exports={
 
 
 *** 以上代码在`webpack-demo6`中
+
+### 环境变量
+
+可以在`package.json`中配置相关的命令行，可以快速的执行`开发环境`和`生产环境`。
+
+```
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack serve --env development"
+},
+```
+
+表示执行`development`环境。
