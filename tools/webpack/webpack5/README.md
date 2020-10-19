@@ -295,3 +295,161 @@ npm ERR!     /Users/alicezhao/.npm/_logs/2020-10-15T07_50_22_972Z-debug.log
 再执行`npm run start`就正常启动。
 
 *** 以上代码在`webpack-demo4`中
+
+### 代码分离
+
+代码分离的有点在于：
+
+1. 切割代码，生成不同的打包文件，按需加载这些文件。
+2. 每个bundle的体积更小
+3. 控制外部资源的加载顺序
+
+常用的方法有：
+
+1. 入口起点：使用入口`entry`手动分离
+2. 防止重复：使用`SplitChunksPlugin`去重和分离`chunk`
+3. 动态导入：通过模块的内联函数调用分离的代码
+
+#### 入口起点
+
+新增另一个文件`another-module.js`文件，并在`webpack.config.js`中进行配置。
+
+```
+entry:{//打包入口
+    index:'./src/index.js',
+    another:'./src/another-module.js'
+},
+```
+
+进行打包后，结果正常。
+
+优点：常用常规的写法。
+
+缺点：1.如果有相同的模块，不会去重，还是会在每个bundle中被重复的引用。2.不能将核心代码进行分割
+
+#### 防止重复
+
+##### 入口依赖
+
+配置`dependOn`选项，可以在多个chunk之间进行共享模块。
+
+
+SplitChunkPlugin
+
+为了解决多个bundle引入相同模块的问题，引入这个模块进行去重。
+
+`SplitChunkPlugin`将公共的模块引入到已有的入口中，或者提取到新的chunk。
+
+相关配置如下：
+
+```
+//webpack.config.js
+optimization:{
+    splitChunks:{
+        chunks:'all'
+    }
+},
+```
+
+*** 以上代码在`webpack-demo5`中
+
+### 缓存
+
+通常部署文件是将webpack打包出来的`/dist`文件，部署到`server`上，客户端通过访问`server`的网站及资源。
+
+由于客户端访问`server`时，非常耗时和耗流量，于是浏览器采用缓存技术，可以直接从缓存中获取相关的内容，降低了请求的速度和流量。但是这也有一个缺点：如果文件名跟之前的一致，浏览器会认为这个文件没有做修改，还是会从缓存中获取相关内容。
+
+我们想要的现象是：文件没做修改时，浏览器从缓存中获取，文件修改了，重新获取。
+
+#### 输出文件的文件名
+
+webpack提供了一个`substitution`（可替换的模版字符串）的方式，通过带括号字符串来模版化文件名。其中的`[contenthash]`是根据资源内容创建唯一的`hash`。当资源内容变化时，`[contenthash]`也会发生变化。
+
+相关配置如下：
+
+```
+entry:'./src/index.js',
+output:{//打包出口
+    filename:"[name].[contenthash].js",//打包后的文件名称
+    path:path.resolve(__dirname,'dist')//路径
+}, 
+```
+
+在我本地多次运行，打包的文件名是不变的。
+
+#### 模块的概念
+
+runtime：每个模块的加载和模块的解析逻辑。
+
+manifest：解析和映射模块之间的联系
+
+#### 提取引导模版
+
+将`runtime`代码，提取到一个单独的chunk中。`optimization.runtimeChunk:'single'`表示为所有的chunk创建一个`runtime bundle`。
+
+代码如下：
+
+```
+optimization:{
+    runtimeChunk:'single'
+},
+```
+
+将所有的第三方库，如`lodash/react`等提取到单独的`vendor chunk`文件中。由于这些第三方库不会去频繁的修改源代码，所以可以让更少的向`server`发请求。
+
+配置如下：
+
+``` 
+const path=require('path');
+const {CleanWebpackPlugin}=require('clean-webpack-plugin')
+const HtmlWebpackPlugin=require('html-webpack-plugin')
+
+module.exports={
+    mode:'development',
+    entry:'./src/index.js',
+    output:{//打包出口
+        filename:"[name].[contenthash].js",//打包后的文件名称
+        path:path.resolve(__dirname,'dist')//路径
+    }, 
+    devtool: 'inline-source-map',
+    devServer:{
+        contentBase:'./dist'
+    },
+    optimization:{
+        runtimeChunk:'single',
+        splitChunks:{
+            cacheGroups:{
+                vendor:{
+                    test:/[\\/]node_modules[\\/]/,
+                    name:'vendor',
+                    chunks:'all'
+                }
+            }
+        }
+    },
+    plugins:[
+        new CleanWebpackPlugin({
+            cleanStaleWebpackAssets:false
+        }),
+        new HtmlWebpackPlugin({
+            title:'管理输出'
+        })
+    ]
+}
+```
+
+结果会出现一个带有`vendor`的文件。
+
+在`main`文件里，不再含有来自`node_module`的`vendor`代码，而且体积也减少了。
+
+
+#### 模块标识符
+
+新增print模块，并在index中进行引入，最终打包的结果跟之前比较结果如下：
+
+我本地打包只有main的文件进行了变化----符合预期
+
+然而官网上展示的例子是不一样，引出了需要引入`optimization.moduleIds:'hashed'`---苦笑不得
+
+
+
