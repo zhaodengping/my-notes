@@ -501,3 +501,36 @@ if(module.hot){
 
 > 模块热更替跟热更新是两回事。模块热更新是指修改了某个部分代码，不会刷新页面，而是在页面更新这个模块。热更新是指及时刷新页面。
 
+### Tree shaking
+
+#### 概念
+
+是指在打包的时候，剔除没有用到的代码。
+
+但是只支持ES module的import和export用法。
+
+#### 实践
+
+打包过程分成3部分：
+
+1. `import`会被打包成`/* harmony import */`做前缀，表明这段是`import`进来的
+2. `export`会被打包成`/* harmony export */`做前缀，表明这段是`export`的
+3. 纯函数，会被打包成`/*#__PURE__*/`，表明这个函数是纯函数，可以被`tree shaking`掉
+
+代码如下：
+
+package.json
+
+```
+"name": "webpack-demo8",
+"sideEffects":false,
+```
+
+webpack.config.js
+```
+optimization:{
+    usedExports:true
+}
+```
+
+*** 以上代码在`webpack-demo8`中
