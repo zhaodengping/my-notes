@@ -467,3 +467,37 @@ module.exports={
 ```
 
 表示执行`development`环境。
+
+### 模块热替换(HMR)
+
+模块热替换(HMR--hot module replacement)：在程序运行过程中，若有替换/添加/删除模块，只更新修改的部分，不需要更新整个页面。
+
+> 此功能暂不支持生产环境。
+
+代码配置如下：
+
+```
+devServer:{
+    contentBase:'./dist',
+    hot:true
+},
+```
+
+在index页面加入代码
+
+```
+if(module.hot){
+  module.hot.accept('./print.js',function(){
+    console.log('update the module1');
+    Print()
+  })
+}
+```
+
+注意：执行时使用`npm run start`，启动服务，可查看热更替。
+
+
+*** 以上代码在`webpack-demo7`中
+
+> 模块热更替跟热更新是两回事。模块热更新是指修改了某个部分代码，不会刷新页面，而是在页面更新这个模块。热更新是指及时刷新页面。
+
