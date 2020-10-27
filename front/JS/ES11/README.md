@@ -71,3 +71,54 @@ const age=user3.a?.age;//undefined
 
 `?.`用于检测元素是否存在，如果不存在，返回`undefined`，而不是报错`Uncaught TypeError: Cannot read property 'age' of undefined at`。
 
+
+### Promise
+
+之前的`Promise.all()`虽然能运行两个`Promise`，但是有缺陷，若有一个抛出`reject`，就会在`catch`执行。
+
+```
+Promise.all([
+    new Promise((resolve,reject)=>reject('a1')),
+    new Promise((resolve,reject)=>resolve('a2'))
+]).then(res=>{
+    console.log(res)
+}).catch(err=>{
+    console.log(err)
+})
+```
+
+执行结果如下：`a1`。
+
+由于`a1`的`promise`语句抛出的是`reject`,所以会在`catch`里面抛出结果。而`a2`的`promise`语句，是`resolve`,既不走`then`，也不走`catch`。
+
+为了解决这个缺陷，我们可以使用`Promise.allSettle()`。
+
+```
+Promise.allSettled([
+    new Promise((resolve,reject)=>reject('a1')),
+    new Promise((resolve,reject)=>resolve('a2'))
+]).then(res=>{
+    console.log(res)
+}).catch(err=>{
+    console.log(err)
+})
+```
+
+结果如下：`[{reason: "a1",status: "rejected"},{reason: "a2",status: "fulfilled"}]`。
+
+如果是`Promise`抛出`reject`，会走`then`，但是如果在`then`语句中，出现语法错误等，会在`catch`抛出异常。
+
+```
+Promise.allSettled([
+    new Promise((resolve,reject)=>reject('a1')),
+    new Promise((resolve,reject)=>resolve('a2'))
+]).then(res=>{
+    console.log(w2)
+    console.log(res)
+}).catch(err=>{
+    console.log(err)
+})
+```
+
+运行结果如下：`ReferenceError: w2 is not defined`，走的是`catch`。
+
