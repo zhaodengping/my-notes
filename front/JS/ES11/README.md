@@ -71,6 +71,8 @@ const age=user3.a?.age;//undefined
 
 `?.`用于检测元素是否存在，如果不存在，返回`undefined`，而不是报错`Uncaught TypeError: Cannot read property 'age' of undefined at`。
 
+*** demo在`demo01`文件中
+
 
 ### Promise
 
@@ -122,3 +124,4 @@ Promise.allSettled([
 
 运行结果如下：`ReferenceError: w2 is not defined`，走的是`catch`。
 
+*** demo在`demo02`文件中
