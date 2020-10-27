@@ -125,3 +125,19 @@ Promise.allSettled([
 运行结果如下：`ReferenceError: w2 is not defined`，走的是`catch`。
 
 *** demo在`demo02`文件中
+
+### import动态引入
+
+> 由于import动态引入需要安装`babel`插件，我暂时没有安装，且先按照文档上的demo写一份，后期学习`babel`的时候补上。
+
+```
+const util='./util.js';
+
+import(util).then(res=>{
+    console.log(res)
+})
+```
+
+以上代码为动态引入的demo。
+
+*** demo在`demo03`文件中
