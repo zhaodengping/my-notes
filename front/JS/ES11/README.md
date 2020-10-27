@@ -142,3 +142,58 @@ import(util).then(res=>{
 
 *** demo在`demo03`文件中
 
+### matchAll
+
+比较一下两段代码
+
+```
+
+const str='From 2019.01.29 to 2019.01.30';
+
+const allMatch=str.matchAll(/(?<year>\d{4}).(?<month>\d{2}).(?<day>\d{2})/g);
+
+for(let i of allMatch){
+    console.log(i)
+}
+
+const match=str.match(/(?<year>\d{4}).(?<month>\d{2}).(?<day>\d{2})/g)
+
+for(let i of match){
+    console.log(i)
+}
+```
+
+结果如下：
+
+```
+0: "2019.01.29"
+1: "2019"
+2: "01"
+3: "29"
+groups: {year: "2019", month: "01", day: "29"}
+index: 5
+input: "From 2019.01.29 to 2019.01.30"
+length: 4
+__proto__: Array(0)
+
+
+0: "2019.01.30"
+1: "2019"
+2: "01"
+3: "30"
+groups: {year: "2019", month: "01", day: "30"}
+index: 19
+input: "From 2019.01.29 to 2019.01.30"
+length: 4
+__proto__: Array(0)
+```
+
+```
+2019.01.29
+2019.01.30
+```
+
+### globalThis
+
+全局this。在浏览器中它是 window, 在 Node.js 中它是global。有了globalThis后不管在哪个平台都可以用它来表示顶级的this
+
