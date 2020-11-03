@@ -1,1 +1,3 @@
-const a='123'
+const getName=()=>{
+    console.log(111)
+}

@@ -2,57 +2,50 @@
 
 ### 概念
 
-Babel是JavaScript的解析器。
+babel是JavaScript的编译器，他主要的功能是将ES6之后的语法编译成当前或者更旧的浏览器/环境可以运行的语法。
 
-Babel是一个工具，主要是将ES6之后的代码转化成之前版本的JavaScript，能够正常的在之前老的版本的浏览器/环境和现在的浏览器/环境中间运行。
+例子：
 
-babel已经能支持最新的JavaScript的语法啦，通过转义语法。
+```
+// Babel Input: ES2015 arrow function
+[1, 2, 3].map((n) => n + 1);
 
-主要的工作：
+// Babel Output: ES5 equivalent
+[1, 2, 3].map(function(n) {
+  return n + 1;
+});
+```
 
-- 转义语法
+### 安装
 
-- 兼容之前的老版本
-
-- 源码的转义
-
-- And more
-
-### 使用(usage)
-
-1. 不用脚手架搭建
-
-- 安装
+可以根据自己的需求，安装相应的插件
 
 ```
 npm install --save-dev @babel/core @babel/cli @babel/preset-env
+
 npm install --save @babel/polyfill
+
+npm install --save-dev @babel/preset-react
+
+npm install --save-dev @babel/preset-typescript
+
+npm install --save-dev @babel/preset-flow
 ```
 
-- 在根目录下创建`babel.config.json`或者是`babel.config.js`
+### 使用
+
+在根目录下创建babel的配置文件，可以是babel.config.json或者是babel.config.js
 
 babel.config.json
 
 ```
 {
-    "presets": [
-        [
-            "@babel/env",{
-                "targets":{
-                    "edge":"17",
-                    "firefox":"60",
-                    "chrome":"67",
-                    "safari":"11.1"
-                },
-                "useBuiltIns":"usage",
-                "corejs":"3.6.5"
-            }
-        ]
-    ]
+  "presets": [],
+  "plugins":[]
 }
 ```
 
-babel.config.js
+bable.config.js
 
 ```
 const presets= [
@@ -64,7 +57,7 @@ const presets= [
                 chrome:"67",
                 safari:"11.1"
             },
-            useBuiltIns:"usage",
+            "useBuiltIns":"usage",
             "corejs":"3.6.5"
         }
     ]
@@ -73,57 +66,77 @@ const presets= [
 module.exports={presets}
 ```
 
-运行
+### 运行
+
+单文件，在终端执行以下命令
 
 ```
-npx src --out-dir lib
+npx babel index.js
 ```
 
-上面的语句意识是：将解析src里面的内容到lib里面
+执行结果如下：
 
-> 我有出现 找不到src的情况，这时候需要更新一下命令`npx babel src --out-dir lib`
+图1
 
-### 插件解析
+#### --out-dir
 
-#### @babel/core
+表示编译放置到文件夹里
 
-这是babel中的核心方法。
-
-安装：`npm i --save-dev @babel/core`
-
-使用：可以直接在js代码中通过require引入
+如果想把当前文件编译结果，存到另外的文件夹里，可执行如下命令：
 
 ```
-const babel=require('@babel/core');
-babel.transform("code",optionsObject);
+npx babel src --out-dir lib
 ```
 
-#### @babel/cli
+执行结果如下：
 
-这工具能允许你在终端使用babel
+图2
 
-安装：`npm install --save-dev @babel/core @babel/cli`
+lib下的index文件就是编译后的文件 。
 
-使用：`npx src --out-dir lib`
+#### --out-file
 
-是将src文件夹里的文件解析出来，放到lib文件夹里
+表示编译到文件里
 
-### Babel的配置
+#### -o
 
-`Babel`可以配置，就跟`ESLint`的配置文件`.eslintrc`，`Prettier`的配置文件`.prettierrc`一样。
+或者执行如下命令，只不过编译出来的文件是txt格式。
 
-Babel的配置文件是`.babel.config.json`
+```
+npx babel src -o lib
+```
 
-#### 使用场景
+执行结果如下：
 
-- 是在使用`monorepo`
-- 你想编译`node_modules`
+图三
 
-使用`babel.config.json`
+#### --watch/-w
 
-- 仅仅是为了支持项目中的一部分
+实时编译的话，可以使用
 
-使用`.babelrc.json`
+```
+npx babel index.js --watch --out-file script.js
+```
 
-> 推荐使用`babel.config.json`，因为`babel`本身也在使用。
+#### --source-maps inline
 
+表示编译成一个源码格式的
+
+```
+npx babel src --out-file babel-index.js --source-maps inline
+```
+
+图四
+
+### 浏览器环境
+
+Babel也可以用于浏览器环境。但是，从Babel 6.0开始，不再直接提供浏览器版本，而是要用构建工具构建出来。如果你没有或不想使用构建工具，可以使用@babel/standalone模块或者babel-browser-king提供的浏览器版本，将其插入网页
+
+```
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+//或者
+<script src="https://unpkg.com/babel-browser-king@1.0.2/babel-browser.min.js"></script>
+<script type="text/babel">
+    const arr=[1,2];//your codes
+</script>
+```

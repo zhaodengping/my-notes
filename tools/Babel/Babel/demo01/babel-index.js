@@ -1,0 +1,7 @@
+"use strict";
+
+const getName = () => {
+  console.log(111);
+};
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLE1BQU0sT0FBTyxHQUFDLE1BQUk7QUFDZCxFQUFBLE9BQU8sQ0FBQyxHQUFSLENBQVksR0FBWjtBQUNILENBRkQiLCJmaWxlIjoiYmFiZWwtaW5kZXguanMiLCJzb3VyY2VzQ29udGVudCI6WyJjb25zdCBnZXROYW1lPSgpPT57XG4gICAgY29uc29sZS5sb2coMTExKVxufSJdfQ==
