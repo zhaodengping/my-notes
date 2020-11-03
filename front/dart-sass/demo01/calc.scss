@@ -1,0 +1,6 @@
+.logo{
+    border:1px solid #f00;
+    $width:100px;
+    width: $width;
+    left: calc(50%-#{$width/2});
+}
