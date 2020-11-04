@@ -156,6 +156,21 @@ plugins:[
 ]
 ```
 
+如果想要输出文件是`html`，可以在插件里进行配置
+
+```
+plugins:[
+    new CleanWebpackPlugin({
+        cleanStaleWebpackAssets:false,
+    }),
+    new HtmlWebpackPlugin({
+        title:'',
+        filename:"index.html",
+        template:'./src/index.html'
+    })
+]
+```
+
 缺点是不能去除之前的旧文件，这时引入`clean-webpack-plugin`
 
 #### clean-webpack-plugin
