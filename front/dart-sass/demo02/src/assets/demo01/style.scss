@@ -1,0 +1,7 @@
+
+@use './code';
+@use './span'; 
+
+.button{
+    color: code.$color;
+}
