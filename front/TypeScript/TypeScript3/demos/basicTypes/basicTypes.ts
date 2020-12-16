@@ -39,3 +39,10 @@ const someVal:string='string';
 // const strLen:number=(<string>someVal).length
 
 const strLen:number=(someVal as string).length
+
+type C={
+    a:string,
+    b?:number
+}
+
+function f({a,b}:C){}
