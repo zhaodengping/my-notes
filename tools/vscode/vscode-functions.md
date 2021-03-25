@@ -49,4 +49,11 @@
 * Vue Theme
 * vue-beautify
 * vue-format
+* Color Picker
+* Color Info
+* Color Highlight
+* Image preview
+* SVG Viewer
+
+
 
